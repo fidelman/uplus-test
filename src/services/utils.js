@@ -26,3 +26,9 @@ export const limitText = (
 
   return result
 }
+
+export const convertDate = (str) => {
+  const date = new Date(str)
+  // format DD/MM/YYYY
+  return `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`
+}

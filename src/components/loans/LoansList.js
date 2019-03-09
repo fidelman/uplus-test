@@ -27,7 +27,7 @@ const SortContainer = styled.div`
 
 function LoansList({ fetchAllLoans, error, loading, loans, loaded }) {
   useEffect(() => {
-    fetchAllLoans()
+    if (!loaded) fetchAllLoans()
   }, [])
 
   if (error) return <Error />
