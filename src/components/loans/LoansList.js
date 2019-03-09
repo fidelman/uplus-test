@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
+import FlipMove from 'react-flip-move'
 import {
   fetchAllLoans,
   isLoadingSelector,
@@ -12,11 +13,16 @@ import {
 import LoanCard from './LoanCard'
 import Error from '../common/Error'
 import Loader from '../common/Loader'
+import Sort from './Sort'
 
-const Layout = styled.div`
+const ListGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   grid-gap: 20px;
+`
+
+const SortContainer = styled.div`
+  margin-bottom: 20px;
 `
 
 function LoansList({ fetchAllLoans, error, loading, loans, loaded }) {
@@ -28,11 +34,18 @@ function LoansList({ fetchAllLoans, error, loading, loans, loaded }) {
   if (loading || !loaded) return <Loader />
 
   return (
-    <Layout>
-      {loans.map((item) => (
-        <LoanCard {...item} key={item.id} />
-      ))}
-    </Layout>
+    <>
+      <SortContainer>
+        <Sort />
+      </SortContainer>
+      <ListGrid>
+        <FlipMove typeName={null}>
+          {loans.map((item) => (
+            <LoanCard {...item} key={item.id} />
+          ))}
+        </FlipMove>
+      </ListGrid>
+    </>
   )
 }
 
