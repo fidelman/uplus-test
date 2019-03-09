@@ -10,7 +10,7 @@ import Collapse from '@material-ui/core/Collapse'
 import CardActions from '@material-ui/core/CardActions'
 import Button from '@material-ui/core/Button'
 import { withStyles } from '@material-ui/core/styles'
-import { convertDate } from '../../services/utils'
+import { convertDate, getAvatarSrc } from '../../services/utils'
 import { getLoansSelector, fetchAllLoans } from '../../ducks/loans'
 import Loader from '../common/Loader'
 import Error from '../common/Error'
@@ -30,6 +30,7 @@ function LoanDetail({ match, loans, fetchAllLoans, classes }) {
     if (loans.length) return
     fetchAllLoans()
   }, [])
+
   if (!loans.length) return <Loader />
   const { loanId } = match.params
   const loanDetail = loans.find((loan) => loan.id === Number(loanId))
@@ -44,7 +45,7 @@ function LoanDetail({ match, loans, fetchAllLoans, classes }) {
         </Typography>
         <Avatar
           className={classes.avatar}
-          src={`https://api.zonky.cz${loanDetail.photos[0].url}`}
+          src={getAvatarSrc(loanDetail.photos[0].url)}
           alt={loanDetail.photos[0].name}
         />
         <Typography variant="h3" component="h1">

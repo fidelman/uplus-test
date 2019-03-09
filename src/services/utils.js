@@ -30,5 +30,10 @@ export const limitText = (
 export const convertDate = (str) => {
   const date = new Date(str)
   // format DD/MM/YYYY
-  return `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`
+  return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
+}
+
+export const getAvatarSrc = (uri) => {
+  if (uri.includes('http')) return uri
+  return `https://api.zonky.cz${uri}`
 }

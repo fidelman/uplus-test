@@ -6,7 +6,7 @@ import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import CardMedia from '@material-ui/core/CardMedia'
 import Typography from '@material-ui/core/Typography'
-import { limitText } from '../../services/utils'
+import { limitText, getAvatarSrc } from '../../services/utils'
 
 const styles = {
   media: {
@@ -21,7 +21,7 @@ function LoadCard(props) {
       <Link to={`/${id}`} style={{ textDecoration: 'none' }}>
         <CardMedia
           className={classes.media}
-          image={`https://api.zonky.cz${photos[0].url}`}
+          image={getAvatarSrc(photos[0].url)}
           title={photos[0].name}
         />
         <CardContent>
