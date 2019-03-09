@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 import { withStyles } from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
@@ -14,20 +15,22 @@ const styles = {
 }
 
 function LoadCard(props) {
-  const { classes, name, photos, story } = props
+  const { classes, name, photos, story, id } = props
   return (
     <Card>
-      <CardMedia
-        className={classes.media}
-        image={`https://api.zonky.cz${photos[0].url}`}
-        title={photos[0].name}
-      />
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="h2">
-          {name}
-        </Typography>
-        <Typography component="p">{limitText(story)}</Typography>
-      </CardContent>
+      <Link to={`/${id}`} style={{ textDecoration: 'none' }}>
+        <CardMedia
+          className={classes.media}
+          image={`https://api.zonky.cz${photos[0].url}`}
+          title={photos[0].name}
+        />
+        <CardContent>
+          <Typography gutterBottom variant="h5" component="h2">
+            {name}
+          </Typography>
+          <Typography component="p">{limitText(story)}</Typography>
+        </CardContent>
+      </Link>
     </Card>
   )
 }

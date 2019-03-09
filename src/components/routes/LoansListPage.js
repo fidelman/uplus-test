@@ -3,7 +3,7 @@ import Typography from '@material-ui/core/Typography'
 import styled from 'styled-components'
 import LoansList from '../loans/LoansList'
 
-const Layout = styled.div`
+export const Layout = styled.div`
   margin: auto;
   max-width: ${(props) => props.theme.maxContainerWidth};
 `
