@@ -8,7 +8,9 @@ import {
   isLoadingSelector,
   isErrorSelector,
   isLoadedSelector,
-  getLoansSelector
+  getLoansSelector,
+  pollLoansStart,
+  pollLoansStop
 } from '../../ducks/loans'
 import LoanCard from './LoanCard'
 import Error from '../common/Error'
@@ -25,9 +27,22 @@ const SortContainer = styled.div`
   margin-bottom: 20px;
 `
 
-function LoansList({ fetchAllLoans, error, loading, loans, loaded }) {
+function LoansList({
+  fetchAllLoans,
+  error,
+  loading,
+  loans,
+  loaded,
+  pollLoansStart,
+  pollLoansStop
+}) {
   useEffect(() => {
     if (!loaded) fetchAllLoans()
+    pollLoansStart()
+
+    return () => {
+      pollLoansStop()
+    }
   }, [])
 
   if (error) return <Error />
@@ -63,5 +78,5 @@ export default connect(
     loaded: isLoadedSelector(state),
     loans: getLoansSelector(state)
   }),
-  { fetchAllLoans }
+  { fetchAllLoans, pollLoansStart, pollLoansStop }
 )(LoansList)
