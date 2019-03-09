@@ -1,7 +1,13 @@
 import React from 'react'
+import { Route } from 'react-router-dom'
+import LoansListPage from './components/routes/LoansListPage'
 
 function App() {
-  return <h1>Hello U+_</h1>
+  return (
+    <>
+      <Route path="/" exact component={LoansListPage} />
+    </>
+  )
 }
 
 export default App
