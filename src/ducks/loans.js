@@ -1,7 +1,15 @@
 import { appName } from '../config'
 import { Record, List } from 'immutable'
 import { createSelector } from 'reselect'
-import { put, takeEvery, call, all } from 'redux-saga/effects'
+import {
+  put,
+  takeEvery,
+  call,
+  all,
+  delay,
+  take,
+  race
+} from 'redux-saga/effects'
 import api from '../services/api'
 
 /**
@@ -16,6 +24,10 @@ export const FETCH_LOANS_SUCCESS = `${prefix}/FETCH_LOANS_SUCCESS`
 export const FETCH_LOANS_FAIL = `${prefix}/FETCH_LOANS_FAIL`
 
 export const SORT_LOANS_BY = `${prefix}/SORT_LOANS_BY`
+
+export const POLL_LOANS_REQUEST = `${prefix}/POLL_LOANS_REQUEST`
+export const POLL_LOANS_START = `${prefix}/POLL_LOANS_START`
+export const POLL_LOANS_STOP = `${prefix}/POLL_LOANS_STOP`
 
 /**
  * Reducer
@@ -39,7 +51,7 @@ export default function reducer(state = new ReducerRecord(), action) {
       return state
         .set('loading', false)
         .set('loaded', true)
-        .update('entities', (entities) => entities.concat(payload.data))
+        .set('entities', List(payload.data))
 
     case FETCH_LOANS_FAIL:
       return state
@@ -132,9 +144,25 @@ export const sortLoansBy = (sortBy) => ({
   payload: { sortBy }
 })
 
+export const pollLoansStart = () => ({ type: POLL_LOANS_REQUEST })
+export const pollLoansStop = () => ({ type: POLL_LOANS_STOP })
+
 /**
  * Sagas
  */
+function* pollLoansSaga() {
+  while (true) {
+    try {
+      yield put({ type: POLL_LOANS_START })
+      yield delay(5 * 60 * 1000)
+      const data = yield call(api.fetchLoans)
+      yield put({ type: FETCH_LOANS_SUCCESS, payload: { data } })
+    } catch (err) {
+      yield put({ type: FETCH_LOANS_FAIL })
+    }
+  }
+}
+
 export function* fetchAllSaga() {
   try {
     yield put({ type: FETCH_LOANS_START })
@@ -145,6 +173,13 @@ export function* fetchAllSaga() {
   }
 }
 
+export function* pollLoansWatcherSaga() {
+  yield race([call(pollLoansSaga), take(POLL_LOANS_STOP)])
+}
+
 export function* saga() {
-  yield all([takeEvery(FETCH_LOANS_REQUEST, fetchAllSaga)])
+  yield all([
+    takeEvery(FETCH_LOANS_REQUEST, fetchAllSaga),
+    takeEvery(POLL_LOANS_REQUEST, pollLoansWatcherSaga)
+  ])
 }

@@ -7,7 +7,6 @@ import { sortLoansBy, sortLoansBySelector } from '../../ducks/loans'
 
 function Sort({ sortBy, sortLoansBy }) {
   const handleChange = (e) => {
-    console.log(e.target.value)
     sortLoansBy(e.target.value)
   }
 
