@@ -3,12 +3,12 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node:10.3.0
       - image: cypress/base:8
         environment:
           TERM: xterm
     environment:
       - NODE_ENV: test
+    parallelism: 1
     steps:
       - checkout
 
@@ -21,6 +21,7 @@ jobs:
       - run:
           name: Install dependencies
           command: npm ci
+
       - save_cache:
           key: v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
           paths:
@@ -28,9 +29,14 @@ jobs:
             - ~/.cache
 
       - run:
+        name: Run e2e tests
+        command: npm run e2e
+
+      - store_test_results:
+          path: multiple-results
+
+      - run:
           name: Run tests
           command: npm t
 
-      - run:
-          name: Run e2e tests
-          command: $(npm bin)/cypress run --record --key <record_key>
+      
