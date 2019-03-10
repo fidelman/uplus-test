@@ -31,6 +31,12 @@
     "e2e": "cypress run",
     "cypress": "cypress open"
   },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"

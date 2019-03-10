@@ -2,26 +2,44 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node:10.3.0
-    environment:
-      - NODE_ENV: test
+      - image: cypress/browsers:chrome67
+        environment:
+          TERM: xterm
+
+    working_directory: ~/root
+
     steps:
       - checkout
-
       - restore_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
+          keys:
+            - dependency-cache-{{ checksum "package.json" }}
+            - dependency-cache
+
       - run:
-          name: Install dependencies
-          command: npm install
+          name: Installing dependencies
+          command: npm ci
+
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
-            - ./node_modules
+            - ~/.npm
+            - ~/.cache
 
       - run:
-          name: Run tests
-          command: npm t
+          name: Unit tests
+          command: npm run test
 
       - run:
-          name: Run E2E tests
+          name: Run Server
+          command: npm start
+          background: true
+
+      - run:
+          name: Integration tests
           command: npm run e2e
+      - store_test_results:
+          path: test-results
+      - store_artifacts:
+          path: cypress/videos
+      - store_artifacts:
+          path: cypress/screenshots
