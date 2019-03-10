@@ -6,10 +6,15 @@ describe('App initialization', () => {
 
   it('Redirects to loads detail Page', () => {
     cy.seedAndVisit()
+
+    const baseUrl = Cypress.config('baseUrl')
+
     cy.get('.cy-loans-list > a')
       .first()
       .click()
       .url()
-      .should('eq', 'http://localhost:3000/zonky/398823')
+      .should('eq', `${baseUrl}/zonky/398823`)
+      .get('h1')
+      .should('have.contain', 'Bydlení')
   })
 })
