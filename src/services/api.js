@@ -3,10 +3,7 @@ import { fetchLoansURL as baseURL } from '../config'
 
 class ApiService {
   a = axios.create({
-    baseURL,
-    headers: {
-      'Access-Control-Allow-Origin': '*'
-    }
+    baseURL
   })
 
   fetchLoans = () => this.a().then((res) => res.data)
