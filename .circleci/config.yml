@@ -30,16 +30,19 @@ jobs:
           command: npm run test
 
       - run:
-          name: Run Server
+          name: Run server
           command: npm start
           background: true
 
       - run:
-          name: Integration tests
+          name: e2e tests
           command: npm run e2e
+
       - store_test_results:
           path: test-results
+
       - store_artifacts:
           path: cypress/videos
+
       - store_artifacts:
           path: cypress/screenshots
