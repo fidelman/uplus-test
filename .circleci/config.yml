@@ -30,6 +30,10 @@ jobs:
           command: npm run test
 
       - run:
+          name: Run Server
+          command: npm start
+
+      - run:
           name: Integration tests
           command: npm run e2e
       - store_test_results:
