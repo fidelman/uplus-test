@@ -30,14 +30,11 @@ jobs:
             - ~/.cache
 
       - run:
-        name: Run e2e tests
-        command: npm run e2e
-
-      - store_test_results:
-          path: multiple-results
-
-      - run:
           name: Run tests
           command: npm t
+
+      - run:
+          name: Run e2e tests
+          command: npm run e2e
 
       
