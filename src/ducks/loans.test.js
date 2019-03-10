@@ -1,5 +1,12 @@
 import { Record, List } from 'immutable'
-import reducer, { sortLoansBy } from './loans'
+import { put, delay } from 'redux-saga/effects'
+import reducer, {
+  sortLoansBy,
+  pollLoansWatcherSaga,
+  POLL_LOANS_START,
+  POLL_LOANS_STOP,
+  pollLoansSaga
+} from './loans'
 import db from '../db'
 
 const getIds = (list) =>
@@ -95,5 +102,27 @@ describe('Loans Sorting', () => {
       const expected = [419682, 419967, 416093, 419045, 419710, 419516]
       expect(getIds(actual)).toEqual(expected)
     })
+  })
+})
+
+describe('Polling', () => {
+  it('should stop polling after unsubscription', () => {
+    const watchingProcess = pollLoansWatcherSaga()
+    // race
+    watchingProcess.next()
+    // finished, means -> after POLL_LOANS_STOP we unsubscribe
+    expect(watchingProcess.next().done).toBe(true)
+
+    const pollingProcess = pollLoansSaga()
+    // start
+    expect(pollingProcess.next().value).toEqual(put({ type: POLL_LOANS_START }))
+    // delay
+    expect(pollingProcess.next().value).toEqual(delay(5 * 60 * 1000))
+    // call
+    pollingProcess.next()
+    // success
+    pollingProcess.next()
+    // not finished
+    expect(pollingProcess.next().value).toEqual(put({ type: POLL_LOANS_START }))
   })
 })
