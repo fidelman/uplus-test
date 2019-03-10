@@ -3,7 +3,7 @@
 
 ## Contents
 - [Development](#development)
-- [CI/CD](#ci/cd)
+- [CI/CD](#cicd)
 
 ## Development
 ### Install Dependencies
@@ -45,6 +45,6 @@ open -a Google\ Chrome --args --disable-web-security --user-data-dir
   - setupTests.js - Setting for [Jest](https://jestjs.io/)
   - style-theme.js - Global Theme for [Styled Components](https://www.styled-components.com/)
 
-## CI/CD
+## CICD
 
 Master branch is connected to the [PROD env](https://uplus-test.herokuapp.com) via Heroku. Circle CI is set for pull requests, which checks unit and e2e tests.
