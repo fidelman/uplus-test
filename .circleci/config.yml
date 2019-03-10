@@ -27,4 +27,10 @@ jobs:
             - ~/.npm
             - ~/.cache
 
-      - run: $(npm bin)/cypress run --record --key <record_key>
+      - run:
+          name: Run tests
+          command: npm t
+
+      - run:
+          name: Run e2e tests
+          command: $(npm bin)/cypress run --record --key <record_key>
