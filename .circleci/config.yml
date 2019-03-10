@@ -1,4 +1,8 @@
-version: 2
+version: 2.1
+
+orbs:
+  cypress: cypress-io/cypress@1
+
 jobs:
   build:
     docker:
@@ -30,4 +34,6 @@ jobs:
           name: Run tests
           command: npm t
 
-      - run: $(npm bin)/cypress run --record --key <record_key>
+      - run:
+          name: Run E2E tests
+          command: npm run e2e
