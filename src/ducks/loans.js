@@ -150,7 +150,7 @@ export const pollLoansStop = () => ({ type: POLL_LOANS_STOP })
 /**
  * Sagas
  */
-function* pollLoansSaga() {
+export function* pollLoansSaga() {
   while (true) {
     try {
       yield put({ type: POLL_LOANS_START })

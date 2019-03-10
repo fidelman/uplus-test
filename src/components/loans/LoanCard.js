@@ -1,12 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
 import { withStyles } from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import CardMedia from '@material-ui/core/CardMedia'
+import { Link } from 'react-router-dom'
 import Typography from '@material-ui/core/Typography'
-import { limitText } from '../../services/utils'
+import { limitText, getAvatarSrc } from '../../services/utils'
 
 const styles = {
   media: {
@@ -21,7 +21,7 @@ function LoadCard(props) {
       <Link to={`/${id}`} style={{ textDecoration: 'none' }}>
         <CardMedia
           className={classes.media}
-          image={`https://api.zonky.cz${photos[0].url}`}
+          image={getAvatarSrc(photos[0].url)}
           title={photos[0].name}
         />
         <CardContent>
@@ -38,8 +38,8 @@ function LoadCard(props) {
 LoadCard.propTypes = {
   classes: PropTypes.object.isRequired,
   name: PropTypes.string.isRequired,
-  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   story: PropTypes.string.isRequired,
+  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   photos: PropTypes.arrayOf(
     PropTypes.shape({
       name: PropTypes.string.isRequired,
