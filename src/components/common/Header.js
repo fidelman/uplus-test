@@ -1,12 +1,20 @@
 import React from 'react'
+import PropTypes from 'prop-types'
+import { withStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import Link from './Link'
 
-function Header() {
+const styles = {
+  bar: {
+    background: '#fff'
+  }
+}
+
+function Header({ classes }) {
   return (
-    <AppBar position="sticky" color="default">
+    <AppBar position="sticky" className={classes.bar}>
       <Toolbar>
         <Link unstyled to="/">
           <Typography variant="h5">
@@ -21,4 +29,8 @@ function Header() {
   )
 }
 
-export default Header
+Header.propTypes = {
+  classes: PropTypes.object.isRequired
+}
+
+export default withStyles(styles)(Header)

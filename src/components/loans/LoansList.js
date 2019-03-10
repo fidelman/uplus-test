@@ -58,7 +58,7 @@ function LoansList({
       <ListGrid className="cy-loans-list">
         <FlipMove typeName={null}>
           {loans.map((item) => (
-            <Link key={item.id} to={`/${item.id}`} unstyled>
+            <Link key={item.id} to={`/zonky/${item.id}`} unstyled>
               <LoanCard key={item.id} {...item} />
             </Link>
           ))}
