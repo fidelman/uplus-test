@@ -11,11 +11,8 @@ export const Layout = styled.div`
 function LoansListPage() {
   return (
     <Layout>
-      <Typography component="h1" variant="h2" gutterBottom>
-        Loans List{' '}
-        <span aria-label="zebra" role="img">
-          🦓
-        </span>
+      <Typography component="h1" variant="h3" gutterBottom>
+        Loans List
       </Typography>
       <LoansList />
     </Layout>

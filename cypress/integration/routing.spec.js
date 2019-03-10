@@ -10,6 +10,6 @@ describe('App initialization', () => {
       .first()
       .click()
       .url()
-      .should('eq', 'http://localhost:3000/398823')
+      .should('eq', 'http://localhost:3000/zonky/398823')
   })
 })
