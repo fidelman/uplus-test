@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
+
 import FlipMove from 'react-flip-move'
 import {
   fetchAllLoans,
@@ -54,16 +54,10 @@ function LoansList({
       <SortContainer>
         <Sort />
       </SortContainer>
-      <ListGrid>
+      <ListGrid className="cy-loans-list">
         <FlipMove typeName={null}>
           {loans.map((item) => (
-            <Link
-              to={`/${item.id}`}
-              key={item.id}
-              style={{ textDecoration: 'none' }}
-            >
-              <LoanCard {...item} />
-            </Link>
+            <LoanCard key={item.id} {...item} />
           ))}
         </FlipMove>
       </ListGrid>
