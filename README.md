@@ -1,68 +1,50 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# U+_ Test Application
+[DEMO](https://uplus-test.herokuapp.com)
 
-## Available Scripts
+## Contents
+- [Development](#development)
+- [CI/CD](#ci/cd)
 
-In the project directory, you can run:
+## Development
+### Install Dependencies
+```
+npm i
+```
+P.S Use NPM instead of yarn. Heroku supports only one lock file, which is not package-lock from NPM. Thank you for understanding.
 
-### `npm start`
+### CORS
+If you encounter a problem with CORS, you have several options to deal with it:
+- Use Safari where it can be disabled (Developer - Disable Cross-Origin Restrictions)
+- Open Chrome via Terminal for OSX. [More info and about Win](https://stackoverflow.com/a/42024918)
+```
+open -a Google\ Chrome --args --disable-web-security --user-data-dir
+```
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Commands
+- Run dev server `npm start`
+- Run Unit tests `npm t`
+- Run e2e tests in browser `npm run cypress`
+- Run e2e in console `npm run e2e`
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+### File Structure
+- cypress - Files for Testing with [Cypress.io](https://www.cypress.io)
+- .circleci - Setting for Circle CI
+- src - Source code of the App
+  - components
+    - common - Reusable Components
+    - routes - Components for Router
+    - ... - specific gourped components
+  - ducks - Action Creators / Reducers and so on. Following [Redux Ducks](https://github.com/erikras/ducks-modular-redux)
+  - redux - Setting Redux store
+  - services - Services like API connection and helpers functions
+  - App.js - Root Component
+  - config.js - Setting for App
+  - db.js - Dump of Data Base for testing
+  - history.js - Setting Browser History for Router
+  - index.js - Entry point
+  - setupTests.js - Setting for [Jest](https://jestjs.io/)
+  - style-theme.js - Global Theme for [Styled Components](https://www.styled-components.com/)
 
-### `npm test`
+## CI/CD
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+Master branch is connected to the [PROD env](https://uplus-test.herokuapp.com) via Heroku. Circle CI is set for pull requests, which checks unit and e2e tests.
