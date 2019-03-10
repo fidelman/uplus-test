@@ -51,6 +51,7 @@ export default function reducer(state = new ReducerRecord(), action) {
       return state
         .set('loading', false)
         .set('loaded', true)
+        .set('sortBy', 'sort-by')
         .set('entities', List(payload.data))
 
     case FETCH_LOANS_FAIL:
@@ -58,6 +59,7 @@ export default function reducer(state = new ReducerRecord(), action) {
         .set('loading', false)
         .set('loaded', true)
         .set('error', true)
+        .set('sortBy', 'sort-by')
 
     case SORT_LOANS_BY:
       return state

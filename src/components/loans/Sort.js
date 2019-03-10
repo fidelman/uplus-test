@@ -6,9 +6,33 @@ import FormControl from '@material-ui/core/FormControl'
 import { sortLoansBy, sortLoansBySelector } from '../../ducks/loans'
 
 function Sort({ sortBy, sortLoansBy }) {
-  const handleChange = (e) => {
-    sortLoansBy(e.target.value)
+  const handleChange = ({ target }) => {
+    const { value } = target
+    if (sortBy !== value) sortLoansBy(value)
   }
+
+  const sorters = [
+    'duration-ASC',
+    'duration-DESC',
+    'rating-ASC',
+    'rating-DESC',
+    'amount-ASC',
+    'amount-DESC',
+    'deadline-ASC',
+    'deadline-DESC'
+  ]
+  const Sorters = sorters.map((item) => {
+    const [sortBy, sortDir] = item.split('-')
+
+    return (
+      <MenuItem key={item} value={item}>
+        {sortBy}{' '}
+        <span role="img" aria-label={sortDir}>
+          {sortDir.toLowerCase() === 'asc' ? '🔺' : '🔻'}
+        </span>
+      </MenuItem>
+    )
+  })
 
   return (
     <FormControl>
@@ -16,54 +40,7 @@ function Sort({ sortBy, sortLoansBy }) {
         <MenuItem disabled value="sort-by">
           Sort By
         </MenuItem>
-        <MenuItem value="duration-ASC">
-          Duration{' '}
-          <span role="img" aria-label="asc">
-            🔺
-          </span>
-        </MenuItem>
-        <MenuItem value="duration-DESC">
-          Duration{' '}
-          <span role="img" aria-label="desc">
-            🔻
-          </span>
-        </MenuItem>
-        <MenuItem value="rating-ASC">
-          Rating{' '}
-          <span role="img" aria-label="asc">
-            🔺
-          </span>
-        </MenuItem>
-        <MenuItem value="rating-DESC">
-          Rating{' '}
-          <span role="img" aria-label="desc">
-            🔻
-          </span>
-        </MenuItem>
-        <MenuItem value="amount-ASC">
-          Amount{' '}
-          <span role="img" aria-label="asc">
-            🔺
-          </span>
-        </MenuItem>
-        <MenuItem value="amount-DESC">
-          Amount{' '}
-          <span role="img" aria-label="desc">
-            🔻
-          </span>
-        </MenuItem>
-        <MenuItem value="deadline-ASC">
-          Deadline{' '}
-          <span role="img" aria-label="asc">
-            🔺
-          </span>
-        </MenuItem>
-        <MenuItem value="deadline-DESC">
-          Deadline{' '}
-          <span role="img" aria-label="desc">
-            🔻
-          </span>
-        </MenuItem>
+        {Sorters}
       </Select>
     </FormControl>
   )
