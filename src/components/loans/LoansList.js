@@ -20,10 +20,39 @@ import Loader from '../common/Loader'
 import Sort from './Sort'
 
 const ListGrid = styled.div`
-  display: grid;
-  /* see /public/index.html line 24 */
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  grid-gap: 20px;
+  /* support IE */
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -20px -20px;
+
+  & > * {
+    width: 100%;
+    padding: 0 20px 20px;
+
+    @media screen and (min-width: 767px) {
+      width: calc(100% / 2);
+    }
+
+    @media screen and (min-width: 1024px) {
+      width: calc(100% / 3);
+    }
+  }
+
+  /* support modern browser */
+  @supports (grid-template-columns: repeat(auto-fill, minmax(280px, 1fr))) and
+    (grid-gap: 20px) {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-gap: 20px;
+
+    /* reset */
+    margin: initial;
+
+    & > * {
+      width: initial;
+      padding: initial;
+    }
+  }
 `
 
 const SortContainer = styled.div`
