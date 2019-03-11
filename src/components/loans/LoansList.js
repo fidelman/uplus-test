@@ -21,6 +21,7 @@ import Sort from './Sort'
 
 const ListGrid = styled.div`
   display: grid;
+  /* see /public/index.html line 24 */
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   grid-gap: 20px;
 `
