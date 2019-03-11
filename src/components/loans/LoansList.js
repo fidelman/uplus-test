@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
+import { breakpoints } from '../../services/constants'
 import Link from '../common/Link'
 
 import FlipMove from 'react-flip-move'
@@ -19,11 +20,40 @@ import Error from '../common/Error'
 import Loader from '../common/Loader'
 import Sort from './Sort'
 
+const gapSize = 20
 const ListGrid = styled.div`
-  display: grid;
-  /* see /public/index.html line 24 */
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  grid-gap: 20px;
+  /* support IE */
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -${gapSize}px -${gapSize}px;
+
+  & > * {
+    width: 100%;
+    padding: 0 ${gapSize}px ${gapSize}px;
+
+    @media screen and (min-width: ${breakpoints.md}px) {
+      width: calc(100% / 2);
+    }
+
+    @media screen and (min-width: ${breakpoints.lg}px) {
+      width: calc(100% / 3);
+    }
+  }
+
+  /* support modern browser */
+  @supports (grid-template-columns: repeat(auto-fill, minmax(280px, 1fr))) and
+    (grid-gap: ${gapSize}px) {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-gap: ${gapSize}px;
+
+    margin: initial;
+
+    & > * {
+      width: initial;
+      padding: initial;
+    }
+  }
 `
 
 const SortContainer = styled.div`
