@@ -1,4 +1,4 @@
-import { Record, List } from 'immutable'
+import { Record, fromJS } from 'immutable'
 import { put, delay } from 'redux-saga/effects'
 import reducer, {
   sortLoansBy,
@@ -12,7 +12,7 @@ import db from '../db'
 const getIds = (list) =>
   list
     .get('entities')
-    .map((item) => item.id)
+    .map((item) => item.get('id'))
     .toJS()
 
 describe('Loans Sorting', () => {
@@ -20,7 +20,7 @@ describe('Loans Sorting', () => {
     it('ASC', () => {
       const action = sortLoansBy('rating-ASC')
       const ReducerRecord = Record({
-        entities: List(db)
+        entities: fromJS(db)
       })
       const actual = reducer(new ReducerRecord(), action)
       const expected = [419516, 419710, 419045, 416093, 419967, 419682]
@@ -30,7 +30,7 @@ describe('Loans Sorting', () => {
     it('DESC', () => {
       const action = sortLoansBy('rating-DESC')
       const ReducerRecord = Record({
-        entities: List(db)
+        entities: fromJS(db)
       })
       const actual = reducer(new ReducerRecord(), action)
       const expected = [419682, 419967, 419045, 416093, 419516, 419710]
@@ -42,7 +42,7 @@ describe('Loans Sorting', () => {
     it('ASC', () => {
       const action = sortLoansBy('duration-ASC')
       const ReducerRecord = Record({
-        entities: List(db)
+        entities: fromJS(db)
       })
       const actual = reducer(new ReducerRecord(), action)
       const expected = [419516, 419710, 419045, 416093, 419967, 419682]
@@ -52,7 +52,7 @@ describe('Loans Sorting', () => {
     it('DESC', () => {
       const action = sortLoansBy('duration-DESC')
       const ReducerRecord = Record({
-        entities: List(db)
+        entities: fromJS(db)
       })
       const actual = reducer(new ReducerRecord(), action)
       const expected = [419682, 419967, 416093, 419045, 419710, 419516]
@@ -64,7 +64,7 @@ describe('Loans Sorting', () => {
     it('ASC', () => {
       const action = sortLoansBy('amount-ASC')
       const ReducerRecord = Record({
-        entities: List(db)
+        entities: fromJS(db)
       })
       const actual = reducer(new ReducerRecord(), action)
       const expected = [419682, 419967, 416093, 419045, 419710, 419516]
@@ -74,7 +74,7 @@ describe('Loans Sorting', () => {
     it('DESC', () => {
       const action = sortLoansBy('amount-DESC')
       const ReducerRecord = Record({
-        entities: List(db)
+        entities: fromJS(db)
       })
       const actual = reducer(new ReducerRecord(), action)
       const expected = [419516, 419710, 419045, 416093, 419967, 419682]
@@ -86,7 +86,7 @@ describe('Loans Sorting', () => {
     it('ASC', () => {
       const action = sortLoansBy('deadline-ASC')
       const ReducerRecord = Record({
-        entities: List(db)
+        entities: fromJS(db)
       })
       const actual = reducer(new ReducerRecord(), action)
       const expected = [419516, 419710, 419045, 416093, 419967, 419682]
@@ -96,7 +96,7 @@ describe('Loans Sorting', () => {
     it('DESC', () => {
       const action = sortLoansBy('deadline-DESC')
       const ReducerRecord = Record({
-        entities: List(db)
+        entities: fromJS(db)
       })
       const actual = reducer(new ReducerRecord(), action)
       const expected = [419682, 419967, 416093, 419045, 419710, 419516]
