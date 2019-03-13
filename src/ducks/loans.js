@@ -1,5 +1,5 @@
 import { appName } from '../config'
-import { Record, List } from 'immutable'
+import { Record, List, fromJS } from 'immutable'
 import { createSelector } from 'reselect'
 import {
   put,
@@ -29,15 +29,20 @@ export const POLL_LOANS_REQUEST = `${prefix}/POLL_LOANS_REQUEST`
 export const POLL_LOANS_START = `${prefix}/POLL_LOANS_START`
 export const POLL_LOANS_STOP = `${prefix}/POLL_LOANS_STOP`
 
+export const FETCH_LOAN_BY_ID_REQUEST = `${prefix}/FETCH_LOAN_BY_ID_REQUEST`
+export const FETCH_LOAN_BY_ID_START = `${prefix}/FETCH_LOAN_BY_ID_START`
+export const FETCH_LOAN_BY_ID_SUCCESS = `${prefix}/FETCH_LOAN_BY_ID_SUCCESS`
+export const FETCH_LOAN_BY_ID_FAIL = `${prefix}/FETCH_LOAN_BY_ID_FAIL`
+
 /**
  * Reducer
  */
 export const ReducerRecord = Record({
   loading: false,
-  loaded: false,
   entities: List([]),
   error: false,
-  sortBy: 'sort-by'
+  sortBy: 'sort-by',
+  loan: null
 })
 
 export default function reducer(state = new ReducerRecord(), action) {
@@ -45,19 +50,22 @@ export default function reducer(state = new ReducerRecord(), action) {
 
   switch (type) {
     case FETCH_LOANS_START:
+    case FETCH_LOAN_BY_ID_START:
       return state.set('loading', true).set('error', false)
 
     case FETCH_LOANS_SUCCESS:
       return state
         .set('loading', false)
-        .set('loaded', true)
         .set('sortBy', 'sort-by')
-        .set('entities', List(payload.data))
+        .set('entities', fromJS(payload.data))
+
+    case FETCH_LOAN_BY_ID_SUCCESS:
+      return state.set('loading', false).set('loan', fromJS(payload.data))
 
     case FETCH_LOANS_FAIL:
+    case FETCH_LOAN_BY_ID_FAIL:
       return state
         .set('loading', false)
-        .set('loaded', true)
         .set('error', true)
         .set('sortBy', 'sort-by')
 
@@ -116,10 +124,7 @@ export const isLoadingSelector = createSelector(
   loansSelector,
   (loans) => loans.get('loading')
 )
-export const isLoadedSelector = createSelector(
-  loansSelector,
-  (loans) => loans.get('loaded')
-)
+
 export const isErrorSelector = createSelector(
   loansSelector,
   (loans) => loans.get('error')
@@ -128,6 +133,14 @@ export const isErrorSelector = createSelector(
 export const getLoansSelector = createSelector(
   loansSelector,
   (loans) => loans.get('entities').toJS()
+)
+
+export const getLoanSelector = createSelector(
+  loansSelector,
+  (loans) => {
+    const loan = loans.get('loan')
+    return loan && loan.toJS()
+  }
 )
 
 export const sortLoansBySelector = createSelector(
@@ -140,6 +153,11 @@ export const sortLoansBySelector = createSelector(
  */
 
 export const fetchAllLoans = () => ({ type: FETCH_LOANS_REQUEST })
+
+export const fetchLoanById = (loanId) => ({
+  type: FETCH_LOAN_BY_ID_REQUEST,
+  payload: { loanId }
+})
 
 export const sortLoansBy = (sortBy) => ({
   type: SORT_LOANS_BY,
@@ -165,7 +183,7 @@ export function* pollLoansSaga() {
   }
 }
 
-export function* fetchAllSaga() {
+export function* fetchLoansSaga() {
   try {
     yield put({ type: FETCH_LOANS_START })
     const data = yield call(api.fetchLoans)
@@ -175,13 +193,24 @@ export function* fetchAllSaga() {
   }
 }
 
+export function* fetchLoanByIdSaga({ payload }) {
+  try {
+    yield put({ type: FETCH_LOAN_BY_ID_START })
+    const data = yield call(api.fetchLoanById, payload.loanId)
+    yield put({ type: FETCH_LOAN_BY_ID_SUCCESS, payload: { data } })
+  } catch (error) {
+    yield put({ type: FETCH_LOAN_BY_ID_FAIL })
+  }
+}
+
 export function* pollLoansWatcherSaga() {
   yield race([call(pollLoansSaga), take(POLL_LOANS_STOP)])
 }
 
 export function* saga() {
   yield all([
-    takeEvery(FETCH_LOANS_REQUEST, fetchAllSaga),
+    takeEvery(FETCH_LOANS_REQUEST, fetchLoansSaga),
+    takeEvery(FETCH_LOAN_BY_ID_REQUEST, fetchLoanByIdSaga),
     takeEvery(POLL_LOANS_REQUEST, pollLoansWatcherSaga)
   ])
 }

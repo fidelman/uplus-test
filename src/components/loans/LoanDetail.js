@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { withRouter } from 'react-router-dom'
-import { connect } from 'react-redux'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
@@ -11,9 +9,6 @@ import CardActions from '@material-ui/core/CardActions'
 import Button from '@material-ui/core/Button'
 import { withStyles } from '@material-ui/core/styles'
 import { convertDate, getAvatarSrc } from '../../services/utils'
-import { getLoansSelector, fetchAllLoans } from '../../ducks/loans'
-import Loader from '../common/Loader'
-import Error from '../common/Error'
 
 const styles = {
   avatar: {
@@ -23,45 +18,35 @@ const styles = {
   }
 }
 
-function LoanDetail({ match, loans, fetchAllLoans, classes }) {
+function LoanDetail({ loan, classes }) {
   const [showFullInfo, setShowFullInfo] = useState(false)
-
-  useEffect(() => {
-    if (loans.length) return
-    fetchAllLoans()
-  }, [])
-
-  if (!loans.length) return <Loader />
-  const { loanId } = match.params
-  const loanDetail = loans.find((loan) => loan.id === Number(loanId))
-  if (!loanDetail) return <Error />
 
   return (
     <Card>
       <CardContent>
         <Typography color="textSecondary" gutterBottom>
-          From {convertDate(loanDetail.datePublished)} till{' '}
-          {convertDate(loanDetail.deadline)}
+          From {convertDate(loan.datePublished)} till{' '}
+          {convertDate(loan.deadline)}
         </Typography>
         <Avatar
           className={classes.avatar}
-          src={getAvatarSrc(loanDetail.photos[0].url)}
-          alt={loanDetail.photos[0].name}
+          src={getAvatarSrc(loan.photos[0].url)}
+          alt={loan.photos[0].name}
         />
         <Typography variant="h3" component="h1">
-          {loanDetail.name}
+          {loan.name}
         </Typography>
         <Typography color="textSecondary" gutterBottom>
-          by {loanDetail.nickName}
+          by {loan.nickName}
         </Typography>
         <Typography component="p" gutterBottom>
-          {loanDetail.story}
+          {loan.story}
         </Typography>
         <Typography component="p" gutterBottom>
-          Rating – {loanDetail.rating.replace(/A/g, '⭐️')}
+          Rating – {loan.rating.replace(/A/g, '⭐️')}
         </Typography>
         <CardActions>
-          <Button color="primary" href={loanDetail.url}>
+          <Button color="primary" href={loan.url}>
             Visit the page
           </Button>
           <Button
@@ -73,9 +58,7 @@ function LoanDetail({ match, loans, fetchAllLoans, classes }) {
         </CardActions>
         <Collapse in={showFullInfo} timeout="auto" unmountOnExit>
           <CardContent>
-            <Typography paragraph>
-              <pre>{JSON.stringify(loanDetail, null, 2)}</pre>
-            </Typography>
+            <pre>{JSON.stringify(loan, null, 2)}</pre>
           </CardContent>
         </Collapse>
       </CardContent>
@@ -84,22 +67,7 @@ function LoanDetail({ match, loans, fetchAllLoans, classes }) {
 }
 
 LoanDetail.propTypes = {
-  fetchAllLoans: PropTypes.func.isRequired,
-  loans: PropTypes.array.isRequired,
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      loanId: PropTypes.string.isRequired
-    }).isRequired
-  }).isRequired
+  loan: PropTypes.object.isRequired
 }
 
-export default withStyles(styles)(
-  withRouter(
-    connect(
-      (state) => ({
-        loans: getLoansSelector(state)
-      }),
-      { fetchAllLoans }
-    )(LoanDetail)
-  )
-)
+export default withStyles(styles)(LoanDetail)

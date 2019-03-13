@@ -10,7 +10,6 @@ import {
   fetchAllLoans,
   isLoadingSelector,
   isErrorSelector,
-  isLoadedSelector,
   getLoansSelector,
   pollLoansStart,
   pollLoansStop,
@@ -67,14 +66,13 @@ function LoansList({
   error,
   loading,
   loans,
-  loaded,
   pollLoansStart,
   pollLoansStop,
   sortLoansBy,
   sortBy
 }) {
   useEffect(() => {
-    if (!loaded) fetchAllLoans()
+    if (!loans.length) fetchAllLoans()
     pollLoansStart()
 
     return () => {
@@ -83,7 +81,7 @@ function LoansList({
   }, [])
 
   if (error) return <Error />
-  if (loading || !loaded) return <Loader />
+  if (loading || !loans.length) return <Loader />
 
   const sorters = [
     'duration-ASC',
@@ -125,7 +123,6 @@ export default connect(
   (state) => ({
     error: isErrorSelector(state),
     loading: isLoadingSelector(state),
-    loaded: isLoadedSelector(state),
     loans: getLoansSelector(state),
     sortBy: sortLoansBySelector(state)
   }),
