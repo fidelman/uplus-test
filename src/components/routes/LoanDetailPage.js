@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import LoanDetail from '../loans/LoanDetail'
-import { Layout } from './LoansListPage'
+import NotFoundPage from '../common/404'
+
 import {
   fetchLoanById,
   getLoanSelector,
@@ -12,7 +13,6 @@ import {
   getLoansSelector
 } from '../../ducks/loans'
 import Loader from '../common/Loader'
-import Error from '../common/Error'
 
 function LoanDetailPage({ loan, fetchLoanById, match, loading, error, loans }) {
   const { loanId } = match.params
@@ -24,17 +24,11 @@ function LoanDetailPage({ loan, fetchLoanById, match, loading, error, loans }) {
     fetchLoanById(match.params.loanId)
   }, [])
 
-  let content = null
+  if (error) return <NotFoundPage />
 
-  if (!loanDetail || loading) {
-    content = <Loader />
-  } else if (error) {
-    content = <Error />
-  } else {
-    content = <LoanDetail loan={loanDetail} />
-  }
+  if (!loanDetail || loading) return <Loader />
 
-  return <Layout>{content}</Layout>
+  return <LoanDetail loan={loanDetail} />
 }
 
 LoanDetailPage.propTypes = {

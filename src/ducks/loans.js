@@ -81,19 +81,19 @@ export default function reducer(state = new ReducerRecord(), action) {
             let smaller = false
 
             if (by === 'deadline' || by === 'amount') {
-              bigger = a[by] > b[by]
-              smaller = a[by] < b[by]
+              bigger = a.get(by) > b.get(by)
+              smaller = a.get(by) < b.get(by)
             } else if (by === 'rating') {
               // AAAA > AAA - vice versa
-              bigger = a.rating < b.rating
-              smaller = a.rating > b.rating
+              bigger = a.get('rating') < b.get('rating')
+              smaller = a.get('rating') > b.get('rating')
             } else if (by === 'duration') {
-              const fromA = Number(new Date(a.datePublished))
-              const toA = Number(new Date(a.deadline))
+              const fromA = Number(new Date(a.get('datePublished')))
+              const toA = Number(new Date(a.get('deadline')))
               const diffA = toA - fromA
 
-              const fromB = Number(new Date(b.datePublished))
-              const toB = Number(new Date(b.deadline))
+              const fromB = Number(new Date(b.get('datePublished')))
+              const toB = Number(new Date(b.get('deadline')))
               const diffB = toB - fromB
 
               bigger = diffA > diffB
@@ -108,6 +108,7 @@ export default function reducer(state = new ReducerRecord(), action) {
             }
             return 0
           })
+
           return result
         })
 
