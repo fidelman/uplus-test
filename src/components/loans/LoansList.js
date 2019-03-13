@@ -13,7 +13,9 @@ import {
   isLoadedSelector,
   getLoansSelector,
   pollLoansStart,
-  pollLoansStop
+  pollLoansStop,
+  sortLoansBySelector,
+  sortLoansBy
 } from '../../ducks/loans'
 import LoanCard from './LoanCard'
 import Error from '../common/Error'
@@ -67,7 +69,9 @@ function LoansList({
   loans,
   loaded,
   pollLoansStart,
-  pollLoansStop
+  pollLoansStop,
+  sortLoansBy,
+  sortBy
 }) {
   useEffect(() => {
     if (!loaded) fetchAllLoans()
@@ -81,10 +85,21 @@ function LoansList({
   if (error) return <Error />
   if (loading || !loaded) return <Loader />
 
+  const sorters = [
+    'duration-ASC',
+    'duration-DESC',
+    'rating-ASC',
+    'rating-DESC',
+    'amount-ASC',
+    'amount-DESC',
+    'deadline-ASC',
+    'deadline-DESC'
+  ]
+
   return (
     <>
       <SortContainer>
-        <Sort />
+        <Sort sortLoansBy={sortLoansBy} sortBy={sortBy} sorters={sorters} />
       </SortContainer>
       <ListGrid className="cy-loans-list">
         <FlipMove typeName={null}>
@@ -111,7 +126,8 @@ export default connect(
     error: isErrorSelector(state),
     loading: isLoadingSelector(state),
     loaded: isLoadedSelector(state),
-    loans: getLoansSelector(state)
+    loans: getLoansSelector(state),
+    sortBy: sortLoansBySelector(state)
   }),
-  { fetchAllLoans, pollLoansStart, pollLoansStop }
+  { fetchAllLoans, pollLoansStart, pollLoansStop, sortLoansBy }
 )(LoansList)
