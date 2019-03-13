@@ -45,9 +45,8 @@ function LoansListPage({
   }, [])
 
   if (error) loansList = <Error />
-  if (loading || !loans.length) loansList = <Loader />
-
-  loansList = <LoansList loans={loans} />
+  else if (loading || !loans.length) loansList = <Loader />
+  else loansList = <LoansList loans={loans} />
 
   const sorters = [
     'duration-ASC',
