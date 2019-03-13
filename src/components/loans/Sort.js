@@ -1,26 +1,14 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import MenuItem from '@material-ui/core/MenuItem'
 import Select from '@material-ui/core/Select'
 import FormControl from '@material-ui/core/FormControl'
-import { sortLoansBy, sortLoansBySelector } from '../../ducks/loans'
 
-function Sort({ sortBy, sortLoansBy }) {
+function Sort({ sortBy, sortLoansBy, sorters }) {
   const handleChange = ({ target }) => {
     const { value } = target
     if (sortBy !== value) sortLoansBy(value)
   }
 
-  const sorters = [
-    'duration-ASC',
-    'duration-DESC',
-    'rating-ASC',
-    'rating-DESC',
-    'amount-ASC',
-    'amount-DESC',
-    'deadline-ASC',
-    'deadline-DESC'
-  ]
   const Sorters = sorters.map((item) => {
     const [sortBy, sortDir] = item.split('-')
 
@@ -46,9 +34,4 @@ function Sort({ sortBy, sortLoansBy }) {
   )
 }
 
-export default connect(
-  (state) => ({
-    sortBy: sortLoansBySelector(state)
-  }),
-  { sortLoansBy }
-)(Sort)
+export default Sort

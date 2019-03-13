@@ -12,15 +12,22 @@ const Layout = styled.div`
   }
 `
 
+const Container = styled.div`
+  margin: auto;
+  max-width: ${(props) => props.theme.maxContainerWidth};
+`
+
 function App() {
   return (
     <Layout>
       <Header />
-      <Switch>
-        <Route path="/" exact component={LoansListPage} />
-        <Route path="/zonky/:loanId" exact component={LoanDetailPage} />
-        <Route component={NotFoundPage} />
-      </Switch>
+      <Container>
+        <Switch>
+          <Route path="/" exact component={LoansListPage} />
+          <Route path="/zonky/:loanId" exact component={LoanDetailPage} />
+          <Route component={NotFoundPage} />
+        </Switch>
+      </Container>
     </Layout>
   )
 }

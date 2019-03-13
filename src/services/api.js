@@ -1,12 +1,12 @@
 import axios from 'axios'
-import { fetchLoansURL as baseURL } from '../config'
+import { fetchLoansURL, fetchLoanURL } from '../config'
 
 class ApiService {
-  a = axios.create({
-    baseURL
-  })
+  a = axios
 
-  fetchLoans = () => this.a().then((res) => res.data)
+  fetchLoans = () => this.a.get(fetchLoansURL).then((res) => res.data)
+  fetchLoanById = (loanId) =>
+    this.a.get(`${fetchLoanURL}/${loanId}`).then((res) => res.data)
 }
 
 export default new ApiService()
